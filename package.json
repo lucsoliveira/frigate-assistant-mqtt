@@ -5,7 +5,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "npx tsc",
-    "dev": "npx ts-node-dev ./src"
+    "dev": "npx ts-node-dev ./src",
+    "start": "pm2 start ./dist/index.js --name mqtt-assistant"
   },
   "author": "",
   "license": "ISC",
@@ -15,7 +16,8 @@
     "dotenv": "^16.4.5",
     "form-data": "^4.0.1",
     "mqtt": "^5.10.2",
-    "node-telegram-bot-api": "^0.66.0"
+    "node-telegram-bot-api": "^0.66.0",
+    "pm2": "^5.4.3"
   },
   "devDependencies": {
     "@types/node": "^22.9.3",

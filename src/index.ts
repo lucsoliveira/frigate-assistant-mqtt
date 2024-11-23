@@ -1,5 +1,4 @@
 require("dotenv").config();
-// import OnDetectionEventApp from "./applications/on-detection-event/on-detection-event.app";
 
 import OnDetectionEventApp from "./applications/on-detection-event/on-detection-event.app";
 import { MqttTopics } from "./constants/topics";
@@ -9,9 +8,6 @@ import TelegramServices from "./services/telegram/telegram.services";
 const mediaApp = new MediaUploader();
 const notifyServices = new TelegramServices();
 const onDetectionEventApp = new OnDetectionEventApp(mediaApp, notifyServices);
-
-//   .then(() => {})
-//   .catch(() => {});
 
 import mqtt from "mqtt";
 
@@ -45,13 +41,17 @@ client.on("error", (err) => {
 client.on("message", async (topic, message: Buffer) => {
   // message is Buffer
 
-  console.info("Message received: ", topic, message.toString());
-  if (topic === MqttTopics.FRIGATE_REVIEWS) {
-    const messageParsed = JSON.parse(message.toString());
-    await onDetectionEventApp.execute(messageParsed);
-  } else if (topic === "testtopic") {
-    const messageParsed = JSON.parse(message.toString());
-    console.log("messageParsed", messageParsed);
-    await onDetectionEventApp.execute(messageParsed);
+  try {
+    console.info("Message received: ", topic, message.toString());
+    if (topic === MqttTopics.FRIGATE_REVIEWS) {
+      const messageParsed = JSON.parse(message.toString());
+      await onDetectionEventApp.execute(messageParsed);
+    } else if (topic === "testtopic") {
+      const messageParsed = JSON.parse(message.toString());
+      console.log("messageParsed", messageParsed);
+      await onDetectionEventApp.execute(messageParsed);
+    }
+  } catch (error: any) {
+    console.error(error.message);
   }
 });
