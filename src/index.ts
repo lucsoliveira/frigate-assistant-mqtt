@@ -22,13 +22,7 @@ const client = mqtt.connect({
 
 client.on("connect", () => {
   console.info("Connected");
-  client.subscribe("presence", (err) => {
-    if (!err) {
-      client.publish("presence", "Hello mqtt");
-    } else {
-      console.error(err);
-    }
-  });
+  client.subscribe("presence", (err) => {});
 
   client.subscribe(MqttTopics.FRIGATE_REVIEWS, (err) => {});
   client.subscribe("testtopic", (err) => {});
