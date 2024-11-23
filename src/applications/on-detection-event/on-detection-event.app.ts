@@ -1,20 +1,18 @@
-import { rmdir } from "fs";
 import MediaUploader from "../../services/medias";
-import { ReviewEventDTO } from "./@types";
-import TelegramServices from "../../services/telegram/telegram.services";
 
 export default class OnDetectionEventApp {
   logger = console;
-  mediaApp = new MediaUploader();
-  notifyServices = new TelegramServices();
-  constructor() {}
+  constructor(
+    readonly mediaUploader: MediaUploader,
+    readonly notifyServices: any,
+  ) {}
 
   async execute(event: any) {
     try {
-      if (event.type === "update" && event.after && event.after.thumb_path) {
+      if (event.type === "end" && event.after && event.after.thumb_path) {
         const thumbPath = event.after.thumb_path;
 
-        const media = await this.mediaApp.upladByMediaPath({
+        const media = await this.mediaUploader.upladByMediaPath({
           path: thumbPath,
           name: `thumb-${event.after.id}.jpg`,
         });
@@ -26,7 +24,7 @@ export default class OnDetectionEventApp {
         });
       }
     } catch (error: any) {
-      console.log({ error: error.response.data });
+      console.log({ error: error });
       this.logger.error(error.message);
     }
   }
