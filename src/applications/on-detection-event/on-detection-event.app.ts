@@ -12,8 +12,10 @@ export default class OnDetectionEventApp {
       if (event.type === "end" && event.after && event.after.thumb_path) {
         const thumbPath = event.after.thumb_path;
 
+        const thumPathNormalized = thumbPath.split("/media/frigate/")[1];
+
         const media = await this.mediaUploader.upladByMediaPath({
-          path: thumbPath,
+          path: thumPathNormalized,
           name: `thumb-${event.after.id}.jpg`,
         });
 
