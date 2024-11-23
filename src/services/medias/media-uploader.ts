@@ -2,6 +2,7 @@ import axios from "axios";
 const FormData = require("form-data");
 import { ResultDTO } from "./@types";
 import fs from "fs";
+import { resolve } from "path";
 export default class MediaUploader {
   logger = console;
   constructor() {}
@@ -20,7 +21,9 @@ export default class MediaUploader {
 
     form.append("action", "upload");
 
-    form.append("source", fs.createReadStream(path));
+    const fileDir = resolve(process.env.MEDIA_BASE_PATH ?? "", path);
+
+    form.append("source", fs.createReadStream(fileDir));
 
     const response = await axios.postForm(options.url, form, {
       url: "https://freeimage.host/api/1/upload",
