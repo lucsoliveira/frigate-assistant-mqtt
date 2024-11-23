@@ -6,7 +6,9 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "npx tsc",
     "dev": "npx ts-node-dev ./src",
-    "start": "pm2 start ./dist/index.js --name mqtt-assistant"
+    "start": "pm2 start ./dist/index.js --name mqtt-assistant",
+    "start:remove": "pm2 delete mqtt-assistant",
+    "start:monit": "pm2 monit"
   },
   "author": "",
   "license": "ISC",
