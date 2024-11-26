@@ -8,7 +8,8 @@ import { GetLastMotionImage } from '../frigate';
 
 const BASE_SNAPSHOT_PATH = resolve(
   process.env.MEDIA_BASE_PATH ?? '',
-  'Snapshots',
+  'clips',
+  'review',
 );
 export default class OnDetectionEventApp {
   logger = console;
