@@ -5,6 +5,7 @@ import {
   HomeActions,
 } from '../../types/home-notifications.types';
 import { GetLastMotionImage } from '../frigate';
+import LoggerWrapper from '../../infra/logger';
 
 const BASE_SNAPSHOT_PATH = resolve(
   process.env.MEDIA_BASE_PATH ?? '',
@@ -12,7 +13,7 @@ const BASE_SNAPSHOT_PATH = resolve(
   'review',
 );
 export default class OnDetectionEventApp {
-  logger = console;
+  logger = LoggerWrapper('OnDetectionEventApp');
   getLastMotionImage = new GetLastMotionImage(BASE_SNAPSHOT_PATH);
   constructor(
     readonly mediaUploader: MediaUploader,
@@ -26,14 +27,18 @@ export default class OnDetectionEventApp {
           event.data.cameraName,
         );
 
-        this.logger.debug('Thumb path normalized: ', thumPathNormalized);
+        this.logger.debug('Thumb path normalized: ', {
+          thumPathNormalized,
+        });
 
         const media = await this.mediaUploader.upladByMediaPath({
           path: thumPathNormalized.imagePath ?? '',
           name: `thumb.jpg`,
         });
 
-        this.logger.debug('Media uploaded: ', media);
+        this.logger.debug('Media uploaded: ', {
+          media,
+        });
         await this.notifyServices.sendMessage({
           title: 'Pessoa proximo a casa.',
           desc: 'Pessoa proximo a casa.',
@@ -41,7 +46,6 @@ export default class OnDetectionEventApp {
         });
       }
     } catch (error: any) {
-      console.log({ error: error });
       this.logger.error(error.message);
     }
   }
