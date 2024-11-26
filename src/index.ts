@@ -11,6 +11,7 @@ const onDetectionEventApp = new OnDetectionEventApp(mediaApp, notifyServices);
 
 import mqtt from 'mqtt';
 import { EventPayload, HomeActions } from './types/home-notifications.types';
+import TelegramBotSingleton from './services/telegram/agent';
 
 function setupMqtt() {
   LoggerWrapper('setupMqtt').info('Setup MQTT');
@@ -53,11 +54,8 @@ function setupMqtt() {
 
 function setupTelegramBot() {
   LoggerWrapper('setupTelegramBot').info('Setup Telegram Bot');
-  const bot = new TelegramBot(process.env.TELEGRAM_API_TOKEN ?? '', {
-    polling: true,
-  });
 
-  bot.on('message', async (msg) => {
+  TelegramBotSingleton.getInstance().on('message', async (msg) => {
     LoggerWrapper('setupTelegramBot').debug(`Received message `, msg);
 
     if (msg.text?.includes('/ultimaMedia')) {

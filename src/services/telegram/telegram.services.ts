@@ -1,11 +1,9 @@
-// TODO: extends..
-const TelegramBot = require("node-telegram-bot-api");
-
-// replace the value below with the Telegram token you receive from @BotFather
+import TelegramBotSingleton from './agent';
 
 export default class TelegramServices {
   TOKEN = process.env.TELEGRAM_API_TOKEN;
   CHAT_ID = Number(process.env.TELEGRAM_CHAT_ID);
+  AGENT = TelegramBotSingleton.getInstance();
   constructor() {}
 
   async sendMessage({
@@ -17,10 +15,8 @@ export default class TelegramServices {
     desc: string;
     imageUrl: string;
   }) {
-    let bot = new TelegramBot(this.TOKEN, { polling: true });
-    await bot.sendMessage(this.CHAT_ID, title);
-    await bot.sendPhoto(this.CHAT_ID, imageUrl);
-    bot = null;
+    await this.AGENT.sendMessage(this.CHAT_ID, title);
+    await this.AGENT.sendPhoto(this.CHAT_ID, imageUrl);
     return true;
   }
 }
