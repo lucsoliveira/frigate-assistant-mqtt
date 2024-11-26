@@ -13,8 +13,11 @@ export default class GetLastMotionImage {
 
       const onlyJpgFiles = basePathData.filter((file) => file.includes('.jpg'));
       const lastFile = onlyJpgFiles[onlyJpgFiles.length - 1];
+
+      this.logger.debug('Last file: ', lastFile);
       const lastFilePath = resolve(this.basePath, lastFile);
 
+      this.logger.debug('Last file path: ', lastFilePath);
       return {
         success: true,
         imagePath: lastFilePath,

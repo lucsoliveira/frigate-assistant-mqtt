@@ -26,11 +26,14 @@ export default class OnDetectionEventApp {
           event.data.cameraName,
         );
 
+        this.logger.debug('Thumb path normalized: ', thumPathNormalized);
+
         const media = await this.mediaUploader.upladByMediaPath({
           path: thumPathNormalized.imagePath ?? '',
           name: `thumb.jpg`,
         });
 
+        this.logger.debug('Media uploaded: ', media);
         await this.notifyServices.sendMessage({
           title: 'Pessoa proximo a casa.',
           desc: 'Pessoa proximo a casa.',
