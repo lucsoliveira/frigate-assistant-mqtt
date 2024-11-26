@@ -14,7 +14,9 @@ export default class GetLastMotionImage {
 
       this.logger.debug('Base path data: ', basePathData);
 
-      const onlyJpgFiles = basePathData.filter((file) => file.includes('.jpg'));
+      const onlyJpgFiles = basePathData.filter((file) =>
+        file.includes('.webp'),
+      );
       const lastFile = onlyJpgFiles[onlyJpgFiles.length - 1];
 
       this.logger.debug('Last file: ', lastFile);
