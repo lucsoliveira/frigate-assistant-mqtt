@@ -1,27 +1,38 @@
-import MediaUploader from "../../services/medias";
+import { resolve } from 'path';
+import MediaUploader from '../../services/medias';
+import {
+  EventPayload,
+  HomeActions,
+} from '../../types/home-notifications.types';
+import { GetLastMotionImage } from '../frigate';
 
+const BASE_SNAPSHOT_PATH = resolve(
+  process.env.MEDIA_BASE_PATH ?? '',
+  'Snapshots',
+);
 export default class OnDetectionEventApp {
   logger = console;
+  getLastMotionImage = new GetLastMotionImage(BASE_SNAPSHOT_PATH);
   constructor(
     readonly mediaUploader: MediaUploader,
     readonly notifyServices: any,
   ) {}
 
-  async execute(event: any) {
+  async execute(event: EventPayload) {
     try {
-      if (event.type === "end" && event.after && event.after.thumb_path) {
-        const thumbPath = event.after.thumb_path;
-
-        const thumPathNormalized = thumbPath.split("/media/frigate/")[1];
+      if (event.action === HomeActions.FRIGATE_MOTION_DETECTED) {
+        const thumPathNormalized = await this.getLastMotionImage.getImage(
+          event.data.cameraName,
+        );
 
         const media = await this.mediaUploader.upladByMediaPath({
-          path: thumPathNormalized,
-          name: `thumb-${event.after.id}.jpg`,
+          path: thumPathNormalized.imagePath ?? '',
+          name: `thumb.jpg`,
         });
 
         await this.notifyServices.sendMessage({
-          title: "Pessoa proximo a casa.",
-          desc: "Pessoa proximo a casa.",
+          title: 'Pessoa proximo a casa.',
+          desc: 'Pessoa proximo a casa.',
           imageUrl: media.url,
         });
       }
