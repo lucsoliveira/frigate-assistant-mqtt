@@ -7,9 +7,12 @@ export default class GetLastMotionImage {
 
   async getImage(cameraName: string) {
     try {
+      this.logger.debug('Base path: ', this.basePath);
       const basePathData = readdirSync(this.basePath, {
         encoding: 'utf-8',
       });
+
+      this.logger.debug('Base path data: ', basePathData);
 
       const onlyJpgFiles = basePathData.filter((file) => file.includes('.jpg'));
       const lastFile = onlyJpgFiles[onlyJpgFiles.length - 1];
